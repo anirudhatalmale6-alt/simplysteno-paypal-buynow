@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SimplySteno payments — local replica</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+         max-width: 1100px; margin: 0 auto; padding: 30px; color: #222; }
+  h4 { font-size: 20px; }
+  .checkbox_wrapper label { display: block; margin: 10px 0; font-size: 15px; }
+  .checkbox_wrapper input { margin-right: 8px; }
+  .paypal_grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px; }
+  .price_box { border: 1px solid #ddd; border-radius: 8px; padding: 20px;
+               width: 240px; text-align: center; background: #fff; }
+  .elementor-image-box-title { font-size: 18px; margin: 10px 0; }
+  .elementor-image-box-title a { color: #0b5ed7; text-decoration: none; }
+  .elementor-image-box-description { font-size: 13px; color: #666; }
+</style>
+</head>
+<body>
+
+<h4>Please check the boxes below before making your payment.</h4>
+
+<!-- ==== his real checkbox markup, verbatim ==== -->
+<div class="checkbox_wrapper">
+  <label>
+    <input type="checkbox" name="agree1">
+    I understand that all payments to SimplySteno are non-refundable and may not be transferred.
+  </label>
+  <label>
+    <input type="checkbox" name="agree2">
+    I understand that even if I take time off from the program, the payment schedule remains the same.
+  </label>
+  <label>
+    <input type="checkbox" name="agree3">
+    I understand that the SimplySteno program is for my use only.
+  </label>
+  <p>Once payment is made, expect an email within 24 hours with a list of questions.
+     You'll be required to respond before we can set up your account.</p>
+</div>
+
+<!-- ==== his real price cards, with the dead hermes links, verbatim shape ==== -->
+<div class="paypal_grid">
+
+  <div class="elementor-element price_box" data-id="4edad2a">
+    <div class="elementor-image-box-wrapper">
+      <figure class="elementor-image-box-img">
+        <a href="https://www.paypal.com/webapps/hermes?token=9FN00626JK6063306&amp;useraction=commit&amp;flowType=WPS" target="_blank" tabindex="-1">
+          <img width="108" height="55" src="paypal.jpg" alt="">
+        </a>
+      </figure>
+      <div class="elementor-image-box-content">
+        <h3 class="elementor-image-box-title">
+          <a href="https://www.paypal.com/webapps/hermes?token=9FN00626JK6063306&amp;useraction=commit&amp;flowType=WPS" target="_blank">$710 (3 months)</a>
+        </h3>
+        <p class="elementor-image-box-description">That covers the starting fee plus the first <b>3 months</b> of the program.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="elementor-element price_box" data-id="43a5788">
+    <div class="elementor-image-box-wrapper">
+      <figure class="elementor-image-box-img">
+        <a href="https://www.paypal.com/webapps/hermes?token=7WP86457VG897960N&amp;useraction=commit&amp;flowType=WPS" target="_blank" tabindex="-1">
+          <img width="108" height="55" src="paypal.jpg" alt="">
+        </a>
+      </figure>
+      <div class="elementor-image-box-content">
+        <h3 class="elementor-image-box-title">
+          <a href="https://www.paypal.com/webapps/hermes?token=7WP86457VG897960N&amp;useraction=commit&amp;flowType=WPS" target="_blank">$970 (6 months)</a>
+        </h3>
+        <p class="elementor-image-box-description">Starting fee plus the first <b>6 months</b>.<br><b>You save $150.</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="elementor-element price_box" data-id="000b8f8">
+    <div class="elementor-image-box-wrapper">
+      <figure class="elementor-image-box-img">
+        <a href="https://www.paypal.com/webapps/hermes?token=48093082B7284190N&amp;useraction=commit&amp;flowType=WPS" target="_blank" tabindex="-1">
+          <img width="108" height="55" src="paypal.jpg" alt="">
+        </a>
+      </figure>
+      <div class="elementor-image-box-content">
+        <h3 class="elementor-image-box-title">
+          <a href="https://www.paypal.com/webapps/hermes?token=48093082B7284190N&amp;useraction=commit&amp;flowType=WPS" target="_blank">$1,590 (12 months)</a>
+        </h3>
+        <p class="elementor-image-box-description">Starting fee plus the first <b>12 months</b>.<br><b>You save $200.</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="elementor-element price_box" data-id="71ca270">
+    <div class="elementor-image-box-wrapper">
+      <figure class="elementor-image-box-img">
+        <a href="http://paypal.com/webapps/hermes?token=84953046RF003382P&amp;useraction=commit&amp;flowType=WPS" target="_blank" tabindex="-1">
+          <img width="108" height="55" src="paypal.jpg" alt="">
+        </a>
+      </figure>
+      <div class="elementor-image-box-content">
+        <h3 class="elementor-image-box-title">
+          <a href="http://paypal.com/webapps/hermes?token=84953046RF003382P&amp;useraction=commit&amp;flowType=WPS" target="_blank">$20 Late Payment Fee</a>
+        </h3>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==== THE DROP-IN WIDGET — everything above is untouched site markup ==== -->
+<!--
+  SimplySteno — PayPal Buy Now buttons + mandatory checkbox gate
+  ---------------------------------------------------------------
+  Paste this whole block into ONE Elementor "HTML" widget, placed at the
+  BOTTOM of the payments page (below the last price card).
+
+  Nothing else on the page needs to change. This script finds the existing
+  price cards, strips the dead PayPal links, and drops a real PayPal button
+  into each one.
+
+  BEFORE GOING LIVE: replace PAYPAL_CLIENT_ID below with the Live client ID.
+-->
+
+<script>
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------ *
+   * 1. CONFIG — the only line you normally need to touch.
+   *    Use the Sandbox client ID to test, the Live one to go live.
+   *    "test" = PayPal's public demo ID (renders buttons, takes no money).
+   * ------------------------------------------------------------------ */
+  var PAYPAL_CLIENT_ID = "test";
+  var CURRENCY         = "USD";
+  var LOCALE           = "en_US";   // pin it, or PayPal guesses from the
+                                    // shopper's IP and shows German/SEPA etc.
+
+  /* Which payment buttons appear on each card.
+     Kept deliberately tight: the gold "Buy Now" button plus PayPal Credit
+     (Pay Later), which the page already advertises. Shoppers without a
+     PayPal account can still pay by card as a guest *inside* the PayPal
+     window, so nothing is lost by not showing a separate card button.
+     To also show a standalone card button, drop "card" from this list. */
+  var DISABLE_FUNDING  = "card,sepa,bancontact,eps,giropay,ideal,mybank,p24,sofort,venmo";
+
+  /* ------------------------------------------------------------------ *
+   * 2. Read the price straight off each card's own heading.
+   *    "$1,590 (12 months)" -> 1590.00
+   *    This means Marc can edit a price in Elementor and the button
+   *    follows automatically — no amounts hardcoded here to drift.
+   * ------------------------------------------------------------------ */
+  function priceFrom(text) {
+    var m = String(text).replace(/ /g, " ").match(/\$\s*([\d,]+(?:\.\d{1,2})?)/);
+    if (!m) return null;
+    var n = parseFloat(m[1].replace(/,/g, ""));
+    return (isFinite(n) && n > 0) ? n.toFixed(2) : null;
+  }
+
+  function cleanName(text) {
+    return String(text).replace(/\s+/g, " ").trim().slice(0, 127);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 3. The three mandatory checkboxes.
+   * ------------------------------------------------------------------ */
+  function boxes() {
+    return Array.prototype.slice.call(
+      document.querySelectorAll('.checkbox_wrapper input[type="checkbox"]')
+    );
+  }
+  function allTicked() {
+    var b = boxes();
+    return b.length > 0 && b.every(function (c) { return c.checked; });
+  }
+
+  /* Warning shown when someone clicks Pay with boxes unticked. */
+  var warning;
+  function warnEl() {
+    if (warning) return warning;
+    warning = document.createElement("p");
+    warning.className = "ss-paypal-warning";
+    warning.setAttribute("role", "alert");
+    warning.textContent =
+      "Please tick all three boxes above before continuing to PayPal.";
+    warning.style.display = "none";
+    var wrap = document.querySelector(".checkbox_wrapper");
+    if (wrap) wrap.appendChild(warning);
+    return warning;
+  }
+  function showWarning() {
+    var w = warnEl();
+    w.style.display = "block";
+    w.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  function hideWarning() {
+    if (warning) warning.style.display = "none";
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 4. Turn each price card into a real PayPal button.
+   * ------------------------------------------------------------------ */
+  function build() {
+    if (!window.paypal || !window.paypal.Buttons) return;
+
+    var cards = document.querySelectorAll(".price_box");
+    if (!cards.length) return;
+
+    Array.prototype.forEach.call(cards, function (card, i) {
+      var heading = card.querySelector(".elementor-image-box-title");
+      if (!heading) return;
+
+      var amount = priceFrom(heading.textContent);
+      if (!amount) return;                       // not a payable card, skip
+      var item = cleanName(heading.textContent);
+
+      /* Kill the dead hermes link, keep the text. The old <a> pointed at an
+         expired one-time checkout session — that is the bug we're fixing. */
+      Array.prototype.forEach.call(
+        card.querySelectorAll('a[href*="/webapps/hermes"]'),
+        function (a) {
+          var span = document.createElement("span");
+          span.className = "ss-paypal-dead-link";
+          span.innerHTML = a.innerHTML;
+          a.parentNode.replaceChild(span, a);
+        }
+      );
+
+      /* The old paypal.jpg image is now redundant — the real button
+         carries PayPal's branding. Hide the empty figure it lived in. */
+      var fig = card.querySelector(".elementor-image-box-img");
+      if (fig && !fig.querySelector("a")) fig.style.display = "none";
+
+      /* Mount point for the button, inside the card. */
+      var mount = document.createElement("div");
+      mount.className = "ss-paypal-button";
+      mount.id = "ss-paypal-button-" + i;
+      var content = card.querySelector(".elementor-image-box-content") || card;
+      content.appendChild(mount);
+
+      paypal.Buttons({
+        style: { layout: "vertical", label: "buynow", shape: "rect", height: 40 },
+
+        /* --- checkbox gate, PayPal's documented pattern ---------------- *
+         * onInit disables the button until all three boxes are ticked;
+         * onClick is the backstop if anything slips through.             */
+        onInit: function (data, actions) {
+          actions.disable();
+          function sync() {
+            if (allTicked()) { actions.enable(); hideWarning(); }
+            else            { actions.disable(); }
+          }
+          boxes().forEach(function (c) { c.addEventListener("change", sync); });
+          sync();
+        },
+
+        onClick: function (data, actions) {
+          if (!allTicked()) {
+            showWarning();
+            return actions.reject();
+          }
+          return actions.resolve();
+        },
+
+        createOrder: function (data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              description: item,
+              amount: { value: amount, currency_code: CURRENCY }
+            }],
+            application_context: { shipping_preference: "NO_SHIPPING" }
+          });
+        },
+
+        onApprove: function (data, actions) {
+          return actions.order.capture().then(function (details) {
+            var payer = (details.payer && details.payer.name &&
+                         details.payer.name.given_name) || "";
+            alert(
+              "Thank you" + (payer ? ", " + payer : "") + "! Your payment for " +
+              item + " went through.\n\nPayPal transaction ID: " + details.id +
+              "\n\nExpect an email within 24 hours with a list of questions. " +
+              "You'll need to reply before your account can be set up."
+            );
+          });
+        },
+
+        onError: function (err) {
+          console.error("[SimplySteno PayPal]", err);
+          alert(
+            "Sorry — PayPal could not complete that payment.\n\n" +
+            "Please try again, or email SpeedBuilders@hotmail.com and we'll " +
+            "sort it out for you."
+          );
+        }
+      }).render("#" + mount.id);
+    });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 5. Load the SDK, then build.
+   * ------------------------------------------------------------------ */
+  function loadSdk() {
+    if (document.getElementById("ss-paypal-sdk")) return;
+    var s = document.createElement("script");
+    s.id = "ss-paypal-sdk";
+    s.src = "https://www.paypal.com/sdk/js" +
+            "?client-id=" + encodeURIComponent(PAYPAL_CLIENT_ID) +
+            "&currency=" + encodeURIComponent(CURRENCY) +
+            "&locale=" + encodeURIComponent(LOCALE) +
+            "&intent=capture" +
+            "&components=buttons" +
+            "&enable-funding=paylater" +           // PayPal Credit
+            "&disable-funding=" + encodeURIComponent(DISABLE_FUNDING);
+    s.onload = build;
+    s.onerror = function () {
+      console.error("[SimplySteno PayPal] SDK failed to load.");
+    };
+    document.head.appendChild(s);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadSdk);
+  } else {
+    loadSdk();
+  }
+})();
+</script>
+
+<style>
+  /* Warning under the checkboxes */
+  .ss-paypal-warning {
+    margin: 12px 0 0;
+    padding: 10px 14px;
+    border-left: 4px solid #c0392b;
+    background: #fdecea;
+    color: #922b21;
+    font-weight: 600;
+  }
+  /* Card headings are no longer links — keep them looking identical */
+  .ss-paypal-dead-link { color: inherit; }
+  /* Give each button a little breathing room inside its card */
+  .ss-paypal-button {
+    margin-top: 14px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* Make it obvious the boxes are the thing standing between you and paying */
+  .checkbox_wrapper label { cursor: pointer; }
+</style>
+
+</body>
+</html>
