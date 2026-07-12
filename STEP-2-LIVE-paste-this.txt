@@ -1,4 +1,11 @@
 <!--
+  ============================================================
+  THIS GOES IN THE **BOTTOM** HTML BLOCK
+  - the one at the very bottom of the page, under the last
+    price box. NOT the one with the checkboxes in it.
+  ============================================================
+-->
+<!--
   SimplySteno — PayPal Buy Now buttons + mandatory checkbox gate
   ---------------------------------------------------------------
   Paste this whole block into ONE Elementor "HTML" widget, placed at the
@@ -30,6 +37,15 @@
   var CURRENCY         = "USD";
   var LOCALE           = "en_US";   // pin it, or PayPal guesses from the
                                     // shopper's IP and shows German/SEPA etc.
+
+  /* ------------------------------------------------------------------ *
+   * THE THANK-YOU MESSAGE the customer sees after paying.
+   * Edit the text between the quotes. Keep the quotes themselves.
+   * Use \n where you want a line break.
+   * ------------------------------------------------------------------ */
+  var THANK_YOU_MESSAGE =
+    "Expect an email within 24 hours with a list of questions. " +
+    "You'll need to reply before your account can be set up.";
 
   /* Which payment buttons appear on each card. Each card shows:
        - the gold "PayPal / Buy Now" button
@@ -97,6 +113,17 @@
    * ------------------------------------------------------------------ */
   function build() {
     if (!window.paypal || !window.paypal.Buttons) return;
+
+    /* No agreement checkboxes on the page = no payments. Fail loudly and
+       visibly rather than showing buttons that can never be unlocked. */
+    if (!boxes().length) {
+      console.error(
+        "[SimplySteno PayPal] The three agreement checkboxes are missing from " +
+        "this page, so no payment buttons will be shown. Restore the checkbox " +
+        "HTML block above the price boxes and they will come back."
+      );
+      return;
+    }
 
     var cards = document.querySelectorAll(".price_box");
     if (!cards.length) return;
@@ -174,8 +201,7 @@
             alert(
               "Thank you" + (payer ? ", " + payer : "") + "! Your payment for " +
               item + " went through.\n\nPayPal transaction ID: " + details.id +
-              "\n\nExpect an email within 24 hours with a list of questions. " +
-              "You'll need to reply before your account can be set up."
+              "\n\n" + THANK_YOU_MESSAGE
             );
           });
         },

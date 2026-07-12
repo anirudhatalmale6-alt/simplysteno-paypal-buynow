@@ -1,0 +1,27 @@
+<!--
+  ============================================================
+  THIS GOES IN THE **TOP** HTML BLOCK
+  - the one directly under the heading
+    "Please check the boxes below before making your payment."
+  ============================================================
+  These are your three agreement checkboxes. Nothing else.
+  Edit the wording between the checkbox and the closing </label>
+  if you ever want to change what a box says.
+-->
+
+<div class="checkbox_wrapper">
+  <label>
+    <input type="checkbox" name="agree1">
+    I understand that all payments to SimplySteno are non-refundable and may not be transferred.
+  </label>
+  <label>
+    <input type="checkbox" name="agree2">
+    I understand that even if I take time off from the program, the payment schedule remains the same.
+  </label>
+  <label>
+    <input type="checkbox" name="agree3">
+    I understand that the SimplySteno program is for my use only.
+  </label>
+  <p>Once payment is made, expect an email within 24 hours with a list of questions.
+     You'll be required to respond before we can set up your account.</p>
+</div>
