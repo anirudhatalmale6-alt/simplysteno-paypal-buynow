@@ -45,45 +45,52 @@ they are.
 1. WordPress → Pages → **Payments** → Edit with Elementor.
 2. Drag an **HTML** widget to the very bottom of the page (below the last price card).
 3. Paste in the entire contents of `simplysteno-paypal-widget.html`.
-4. Set `PAYPAL_CLIENT_ID` (line ~25) — see below.
-5. Update.
+4. Update.
 
-### Client ID
+### Sandbox → Live
 
-Get these from https://developer.paypal.com → Apps & Credentials, using the Business account:
+The widget ships wired to the **Sandbox** Client ID, so the first payment you make is fake money.
+Once you're happy, flip two lines near the top of the file:
 
-- **Sandbox** tab → Client ID → test the whole flow with fake money.
-- **Live** tab → Client ID → real payments.
+```js
+var PAYPAL_CLIENT_ID =
+  /* SANDBOX */ "AfnC9p0V...";     // <- comment this line out
+  /* LIVE    */ // "AY1XMO_T...";  // <- uncomment this one
+```
 
-The file ships with `PAYPAL_CLIENT_ID = "test"`, PayPal's public demo ID. Buttons render and the
-checkout window opens, but **no money moves** — safe for previewing, useless for real payments.
-Swap it for the Live ID when you're happy.
+Nothing else changes. To test the sandbox flow you sign in at the PayPal window with a **sandbox
+buyer** account (developer.paypal.com → Testing Tools → Sandbox Accounts — PayPal creates a
+personal one for you automatically), not your real PayPal login.
 
 ## Verified
 
-Driven in a real browser (Playwright, Chromium):
+Driven in a real browser (Playwright, Chromium), against the **real Sandbox Client ID**:
 
 | Test | Result |
 |---|---|
+| buttons rendered per card | **3** — Buy Now, Pay Later, Debit or Credit Card |
 | 0 boxes ticked → click Buy Now | **blocked**, no PayPal window, warning shown |
+| 0 boxes ticked → click Debit or Credit Card | **blocked**, no PayPal window |
 | 2 of 3 ticked → click Buy Now | **blocked**, no PayPal window |
 | 3 of 3 ticked → click Buy Now | **PayPal checkout opens** (`sandbox.paypal.com/checkoutnow`) |
-| untick a box afterwards | button **re-locks** immediately |
+| untick a box afterwards | buttons **re-lock** immediately |
 | dead `hermes` links remaining on page | **0** |
 | JS errors | none |
 
-Screenshots: `shot_1_blocked.png`, `shot_2_unlocked.png`, `shot_3_us_locale.png`.
+The gate is enforced by PayPal itself, not by us hiding anything — with the boxes unticked, PayPal's
+own accessibility label on all three buttons reads *"This button is currently inactive."*
+
+Screenshots: `shot_4_three_buttons.png`, `shot_1_blocked.png`, `shot_2_unlocked.png`.
 
 ## Notes
 
 - `LOCALE` is pinned to `en_US`. Without it PayPal guesses from the shopper's IP — while testing
   from a European server the buttons came up in German ("Später Bezahlen") with SEPA Direct Debit
   offered. Pinning the locale prevents that.
-- Funding is trimmed to the gold **Buy Now** button plus **Pay Later** (PayPal Credit), which the
-  page already advertises. Shoppers without a PayPal account can still pay by card as a guest
-  *inside* the PayPal window. If you'd rather show a separate "Debit or Credit Card" button on each
-  card, remove `card` from `DISABLE_FUNDING`.
-- The `$20 Late Payment Fee` card gets a button too, same as the rest.
+- Each card shows **Buy Now**, **Pay Later** (PayPal Credit, which the page already advertises) and
+  **Debit or Credit Card** for shoppers with no PayPal account. Europe-only rails (SEPA, iDEAL,
+  giropay…) and Venmo are switched off in `DISABLE_FUNDING` — they'd only clutter the card.
+- The `$20 Late Payment Fee` card gets buttons too, same as the rest.
 
 ## Files
 

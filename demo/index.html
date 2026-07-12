@@ -127,21 +127,27 @@
 
   /* ------------------------------------------------------------------ *
    * 1. CONFIG — the only line you normally need to touch.
-   *    Use the Sandbox client ID to test, the Live one to go live.
-   *    "test" = PayPal's public demo ID (renders buttons, takes no money).
+   *
+   *    SANDBOX (fake money, for testing)  <-- currently active
+   *    LIVE    (real money)               <-- swap in when you're happy
+   *
+   *    To go live: comment out the SANDBOX line, uncomment the LIVE line.
    * ------------------------------------------------------------------ */
-  var PAYPAL_CLIENT_ID = "test";
+  var PAYPAL_CLIENT_ID =
+    /* SANDBOX */ "AfnC9p0Vcdgx8SSWAx-Z9Tj_IF_ClNjcmb0E5yjqh_Auu6EmsoD_rDRlF-Ja9i5S_84kzJLXv4mmmwwy";
+    /* LIVE    */ // "AY1XMO_TbgDuGrqwOewBRgCriJngfl1h0GQrdpVY5n1opz6pLYu-R2EfwerSVXTbsA2sV-uYuM0DlEvL";
+
   var CURRENCY         = "USD";
   var LOCALE           = "en_US";   // pin it, or PayPal guesses from the
                                     // shopper's IP and shows German/SEPA etc.
 
-  /* Which payment buttons appear on each card.
-     Kept deliberately tight: the gold "Buy Now" button plus PayPal Credit
-     (Pay Later), which the page already advertises. Shoppers without a
-     PayPal account can still pay by card as a guest *inside* the PayPal
-     window, so nothing is lost by not showing a separate card button.
-     To also show a standalone card button, drop "card" from this list. */
-  var DISABLE_FUNDING  = "card,sepa,bancontact,eps,giropay,ideal,mybank,p24,sofort,venmo";
+  /* Which payment buttons appear on each card. Each card shows:
+       - the gold "PayPal / Buy Now" button
+       - "Pay Later" (PayPal Credit), which the page already advertises
+       - a black "Debit or Credit Card" button, for shoppers with no PayPal account
+     Everything else (SEPA, iDEAL, giropay, Venmo...) is switched off — they're
+     either European-only or irrelevant here, and they just clutter the card. */
+  var DISABLE_FUNDING  = "sepa,bancontact,eps,giropay,ideal,mybank,p24,sofort,venmo";
 
   /* ------------------------------------------------------------------ *
    * 2. Read the price straight off each card's own heading.

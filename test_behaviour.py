@@ -13,20 +13,32 @@ with sync_playwright() as p:
     popups = []
     ctx.on("page", lambda pop: popups.append(pop))
 
-    pg.goto("http://127.0.0.1:8912/", wait_until="networkidle", timeout=60000)
+    pg.goto("http://127.0.0.1:8947/index.html", wait_until="networkidle", timeout=60000)
     pg.wait_for_selector(".ss-paypal-button iframe", timeout=30000)
     pg.wait_for_timeout(3000)
 
-    btn = pg.frame_locator(".ss-paypal-button iframe").first.locator(
-        "[data-funding-source='paypal']").first
+    fr = pg.frame_locator(".ss-paypal-button iframe").first
+    btn  = fr.locator("[data-funding-source='paypal']").first
+    card = fr.locator("[data-funding-source='card']").first
+    print("BUTTONS on first card:",
+          fr.locator("[data-funding-source]").count(),
+          "| card button present:", card.count() > 0, "(want True)")
+    print("dead hermes links left:",
+          pg.locator('a[href*="/webapps/hermes"]').count(), "(want 0)")
 
     # --- TEST 1: boxes unticked -> click must NOT open PayPal ---
     btn.click(force=True)
     pg.wait_for_timeout(4000)
-    print("TEST 1  boxes UNTICKED, clicked Pay")
+    print("TEST 1  boxes UNTICKED, clicked PayPal")
     print("        PayPal windows opened :", len(popups), "(want 0)")
     print("        warning shown to user :", warning_visible(pg), "(want True)")
     pg.screenshot(path="shot_1_blocked.png")
+
+    # --- TEST 1b: the new Debit/Credit Card button must be gated too ---
+    card.click(force=True)
+    pg.wait_for_timeout(4000)
+    print("TEST 1b boxes UNTICKED, clicked Debit or Credit Card")
+    print("        PayPal windows opened :", len(popups), "(want 0)")
 
     # --- TEST 2: only 2 of 3 -> still blocked ---
     pg.check('input[name="agree1"]'); pg.check('input[name="agree2"]')
